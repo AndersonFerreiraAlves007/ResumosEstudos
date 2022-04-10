@@ -51,3 +51,9 @@ graph TD;
 Essa é uma simples nota de rodapé[^1].
 
 <!-- This content will not appear in the rendered Markdown -->
+
+| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      | centered      |   $12 |
+| zebra stripes | are neat      |    $1 |
