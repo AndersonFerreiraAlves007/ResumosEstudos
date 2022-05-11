@@ -212,3 +212,21 @@ Produção:
 - Entrega contínua (codigo, build, integração ,testes e release)
 - Implantação contínua (codigo, build, integração ,testes ,release e deploy)
 - Devops (codigo, build, integração ,testes ,release ,deploy, operação)
+
+Pontos constratantes com metodologias ágeis:
+
+- Velocidade
+- Implantação
+- Especialização
+- Comunicação
+- Documentação
+- Tamanho da equipe
+- Sprints
+- Automação
+
+# O que Devops não é
+
+- Não é um produto, é uma cultura, não ocorre de uma hora pra outra
+- Não é moda, aplicar somente se fizer sentido pra vc
+- Não é julgamento, não olhar para os outros com desmerito senão aplicarem tudo do devops
+- Não é para ser um club exclusivo, leia, contribui com devops
