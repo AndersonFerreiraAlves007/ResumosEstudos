@@ -1,0 +1,256 @@
+nginx:
+  sudo apt update
+  sudo apt install nginx
+  ufw enable
+  sudo ufw app list
+  sudo ufw allow 'Nginx HTTP'
+  sudo ufw status
+  systemctl status nginx
+
+  sudo systemctl stop nginx
+  sudo systemctl start nginx
+  sudo systemctl restart nginx
+  sudo systemctl reload nginx
+
+
+  sudo mkdir -p /var/www/your_domain/html
+  sudo chown -R $USER:$USER /var/www/your_domain/html
+  sudo chmod -R 755 /var/www/your_domain
+
+
+o Let's Encrypt:
+  sudo apt install certbot python3-certbot-nginx
+
+  sudo nano /etc/nginx/sites-available/example.com
+  server_name example.com www.example.com;
+
+  sudo nginx -t
+  sudo systemctl reload nginx
+
+  sudo ufw status
+  sudo ufw allow 'Nginx Full'
+  sudo ufw delete allow 'Nginx HTTP'
+
+  sudo certbot --nginx -d example.com -d www.example.com
+  sudo systemctl status certbot.timer
+  sudo certbot renew --dry-run
+
+  sudo ln -s /etc/nginx/sites-available/fc.andersonferreiraalves.com.conf /etc/nginx/sites-enabled/
+
+  sudo certbot certonly --agree-tos --email andersonamericasul07@gmail.com -d fc.andersonferreiraalves.com
+
+  listen [::]:443 ssl ipv6only=on; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/andersonferreiraalves.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/andersonferreiraalves.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+node:
+  sudo apt update
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+  source ~/.bashrc
+  nvm install v13.6.0
+  nvm use v13.6.0
+
+Proxy Reverso:
+  sudo nano /etc/nginx/sites-available/example.com
+
+  server {
+...
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+...
+}
+
+server {
+...
+    location /app2 {
+        proxy_pass http://localhost:3001;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+...
+}
+
+sudo nginx -t
+sudo systemctl restart nginx
+
+git:
+  git config --global credential.helper store
+
+mysql:
+  sudo apt update
+  sudo apt install mysql-server
+  sudo mysql_secure_installation
+
+  SELECT user,authentication_string,plugin,host FROM mysql.user;
+  sudo mysql
+  ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
+  FLUSH PRIVILEGES;
+  SELECT user,authentication_string,plugin,host FROM mysql.user;
+  exit
+
+  mysql -u root -p
+  CREATE USER 'sammy'@'localhost' IDENTIFIED BY 'password';
+  GRANT ALL PRIVILEGES ON *.* TO 'sammy'@'localhost' WITH GRANT OPTION;
+  exit
+
+  systemctl status mysql.service
+  sudo systemctl start mysql.
+
+  sudo ufw allow 3306/tcp
+
+Acesso remoto mysql:
+  /etc/mysql/mysql.conf.d/mysqld.cnf
+  bind-address = 0.0.0.0
+  systemctl restart mysql.service
+
+  CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
+
+  GRANT ALL PRIVILEGES ON *.* TO 'username'@'localhost' WITH GRANT OPTION;
+
+  CREATE USER 'username'@'%' IDENTIFIED BY 'password';
+
+  GRANT ALL PRIVILEGES ON *.* TO 'username'@'%' WITH GRANT OPTION;
+
+  FLUSH PRIVILEGES;
+
+Fuso horário:
+  timedatectl list-timezones
+  sudo timedatectl set-timezone America/Toronto
+  // algum comando para restart a maquina
+
+  /etc/my.cnf
+  default-time-zone='+00:00' 
+  sudo service mysql restart
+
+PM2:
+  pm2 startup
+  pm2 startup systems
+  systemctl status pm2-root.service
+  pm2 save
+  pm2 ls
+  pm2 status
+  pm2 resurrect
+
+  pm2 unstartup
+  pm2 startup
+
+
+
+mysql correto:
+
+  sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+  ...
+  bind-address            = 0.0.0.0
+  ...
+
+  sudo systemctl restart mysql
+
+  sudo mysql
+
+  mysql -u root -p
+
+  CREATE USER 'user'@'%' IDENTIFIED WITH mysql_native_password BY 'password';
+
+  GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD on *.* TO 'user'@'%' WITH GRANT OPTION;
+
+  FLUSH PRIVILEGES;
+
+  exit
+
+  sudo ufw allow 3306
+
+
+
+
+
+
+
+
+  server {
+       listen 80;
+       listen [::]:80;
+
+       server_name gameeducacional.andersonferreiraalves.com;
+
+       root /var/www/gameeducacional.andersonferreiraalves.com;
+       index index.html;
+
+       location / {
+              proxy_pass http://localhost:3333;
+              proxy_http_version 1.1;
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection 'upgrade';
+              proxy_set_header Host $host;
+              proxy_cache_bypass $http_upgrade;
+       }
+
+       listen [::]:443 ssl; # managed by Certbot
+       listen 443 ssl; # managed by Certbot
+       ssl_certificate /etc/letsencrypt/live/gameeducacional.andersonferreiraalves.com/fullchain.pem; # managed by Certbot
+       ssl_certificate_key /etc/letsencrypt/live/gameeducacional.andersonferreiraalves.com/privkey.pem; # managed by Certbot
+       include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+       ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+
+
+
+
+
+
+
+
+
+
+
+
+location / {
+              proxy_pass http://localhost:3334;
+              proxy_http_version 1.1;
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection 'upgrade';
+              proxy_set_header Host $host;
+              proxy_cache_bypass $http_upgrade;
+       }
+
+       listen [::]:443 ssl; # managed by Certbot
+       listen 443 ssl; # managed by Certbot
+       ssl_certificate /etc/letsencrypt/live/gameeducacional.andersonferreiraalves.com/fullchain.pem; # managed by Certbot
+       ssl_certificate_key /etc/letsencrypt/live/gameeducacional.andersonferreiraalves.com/privkey.pem; # managed by Certbot
+       include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+       ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+
+
+
+
+
+
+       ☐ location / {
+        proxy_pass http://localhost:3333;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+ }
+
+ listen [::]:443 ssl; # managed by Certbot
+ listen 443 ssl; # managed by Certbot
+ ssl_certificate /etc/letsencrypt/live/apigameeducacional.andersonferreiraalves.com/fullchain.pem; # managed by Certbot
+ ssl_certificate_key /etc/letsencrypt/live/apigameeducacional.andersonferreiraalves.com/privkey.pem; # managed by Certbot
+ include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+ ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
