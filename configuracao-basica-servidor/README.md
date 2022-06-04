@@ -104,3 +104,71 @@
   sudo systemctl restart nginx
   sudo systemctl reload nginx
 
+# mysql correto:
+
+  sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+  ...
+  bind-address            = 0.0.0.0
+  ...
+
+  sudo systemctl restart mysql
+
+  sudo mysql
+
+  mysql -u root -p
+
+  CREATE USER 'user'@'%' IDENTIFIED WITH mysql_native_password BY 'password';
+
+  GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD on *.* TO 'user'@'%' WITH GRANT OPTION;
+
+  FLUSH PRIVILEGES;
+
+  exit
+
+  sudo ufw allow 3306
+
+# PM2:
+  pm2 startup
+  pm2 startup systems
+  systemctl status pm2-root.service
+  pm2 save
+  pm2 ls
+  pm2 status
+  pm2 resurrect
+
+  pm2 unstartup
+  pm2 startup
+
+# git:
+  git config --global credential.helper store
+
+# mysql:
+  sudo apt update
+  sudo apt install mysql-server
+  sudo mysql_secure_installation
+
+  SELECT user,authentication_string,plugin,host FROM mysql.user;
+  sudo mysql
+  ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
+  FLUSH PRIVILEGES;
+  SELECT user,authentication_string,plugin,host FROM mysql.user;
+  exit
+
+  mysql -u root -p
+  CREATE USER 'sammy'@'localhost' IDENTIFIED BY 'password';
+  GRANT ALL PRIVILEGES ON *.* TO 'sammy'@'localhost' WITH GRANT OPTION;
+  exit
+
+  systemctl status mysql.service
+  sudo systemctl start mysql.
+
+  sudo ufw allow 3306/tcp
+
+# Fuso horário:
+  timedatectl list-timezones
+  sudo timedatectl set-timezone America/Toronto
+  // algum comando para restart a maquina
+
+  /etc/my.cnf
+  default-time-zone='+00:00' 
+  sudo service mysql restart
