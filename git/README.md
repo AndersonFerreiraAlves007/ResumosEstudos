@@ -12,6 +12,7 @@ inicia um repositorio git
 ```
   git config --global user.name "", define o nome do usuário
   git config --global user.email "", define o email
+  git config --global credential.helper store
 ```
 
 ## git status

@@ -21,4 +21,3 @@ yarn commitizen init cz-conventional-changelog --yarn --dev --exact
 "scripts": {
   "commit": "git-cz"
 }
-
