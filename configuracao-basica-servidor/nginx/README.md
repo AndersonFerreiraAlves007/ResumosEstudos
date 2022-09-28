@@ -33,7 +33,7 @@
 	}
 ```
 
-  2. sudo ln -s /etc/nginx/sites-available/hostNameVaiAqui.conf /etc/3. nginx/sites-enabled/
+  2. sudo ln -s /etc/nginx/sites-available/hostNameVaiAqui.conf /etc/nginx/sites-enabled/
   4. sudo nginx -t
   5. sudo systemctl reload nginx
 
