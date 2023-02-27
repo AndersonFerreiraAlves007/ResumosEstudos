@@ -1,49 +1,49 @@
-# mysql correto:
+# mysql
 
-  sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
-  ...
-  bind-address            = 0.0.0.0
-  ...
+sudo apt update
+sudo apt install mysql-server
+systemctl is-active mysql
 
-  sudo systemctl restart mysql
+sudo mysql
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
+FLUSH PRIVILEGES;
+exit
 
-  sudo mysql
+systemctl status mysql.service
+sudo systemctl start mysql.
 
-  mysql -u root -p
+sudo ufw allow 3306/tcp
 
-  CREATE USER 'user'@'%' IDENTIFIED WITH mysql_native_password BY 'password';
+sudo mysql_secure_installation
 
-  GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD on *.* TO 'user'@'%' WITH GRANT OPTION;
+mysql -u root -p
 
-  FLUSH PRIVILEGES;
+sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+...
+bind-address            = 0.0.0.0
+...
 
-  exit
+sudo systemctl restart mysql
 
-  sudo ufw allow 3306
+CREATE USER 'user'@'%' IDENTIFIED WITH mysql_native_password BY 'password';
+GRANT ALL PRIVILEGES ON database_name.* TO 'username'@'%'; (database_name pode ser *, se for para todos)
+FLUSH PRIVILEGES;
 
-# mysql:
-  sudo apt update
-  sudo apt install mysql-server
-  sudo mysql_secure_installation
+DELETE FROM mysql.user where user = 'sartori';
 
-  SELECT user,authentication_string,plugin,host FROM mysql.user;
-  sudo mysql
-  ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
-  FLUSH PRIVILEGES;
-  SELECT user,authentication_string,plugin,host FROM mysql.user;
-  exit
+SELECT user,authentication_string,plugin,host FROM mysql.user;
 
-  mysql -u root -p
-  DELETE FROM mysql.user where user = 'sartori';
+# mysql workbench
 
-  CREATE USER 'sartori'@'192.168.0.%' IDENTIFIED BY 'minha senha';
-  GRANT ALL PRIVILEGES ON *.* TO 'sartori'@'192.168.0.%';
+sudo snap install mysql-workbench-community
 
-  CREATE USER 'sammy'@'localhost' IDENTIFIED BY 'password';
-  GRANT ALL PRIVILEGES ON *.* TO 'sammy'@'localhost' WITH GRANT OPTION;
-  exit
+sudo snap connect mysql-workbench-community:password-manager-service :password-manager-service
 
-  systemctl status mysql.service
-  sudo systemctl start mysql.
+# backup
 
-  sudo ufw allow 3306/tcp
+mysql -u [user name] –p [target_database_name] < [dumpfilename.sql]
+mysql --host=dbfmylast --user=root --port=3306 -p sakila < D:\sakila.sql
+mysql -u root -p < alldatabases.sql
+
+mysqldump --host=dbfmylast --user=root --port=3306 -p sakila working_hours > D:\backup_working_hours_table.sql
+
