@@ -1,0 +1,2 @@
+sudo usermod -a -G vboxsf your_account_name
+sudo chown -R your_account_name:users /media/your_share_folder_name/
