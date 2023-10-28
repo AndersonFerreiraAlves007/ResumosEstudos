@@ -47,3 +47,19 @@ mysql -u root -p < alldatabases.sql
 
 mysqldump --host=dbfmylast --user=root --port=3306 -p sakila working_hours > D:\backup_working_hours_table.sql
 
+# logs
+
+general_log_file        = /var/log/mysql/mysql.log
+general_log             = 1
+
+log_slow_queries       = /var/log/mysql/mysql-slow.log
+long_query_time = 2
+log-queries-not-using-indexes
+
+service mysql restart
+
+mysql -u root -p
+
+SET GLOBAL general_log = 'ON';
+SET GLOBAL slow_query_log = 'ON';
+
